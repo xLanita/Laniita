@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOVE PILLAR - Aesthetic Space</title>
+    <title>HINATA - Aesthetic Space</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -38,7 +38,6 @@
     </script>
 
     <style>
-        /* Custom scrollbars and glowing effects */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -53,25 +52,35 @@
         .soft-shadow {
             box-shadow: 0 10px 30px -5px rgba(244, 114, 182, 0.2), 0 8px 10px -6px rgba(244, 114, 182, 0.1);
         }
-        
-        .pill-shadow {
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.25);
-        }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        /* Overlay text script effect */
         .script-title {
             font-family: 'Sacramento', cursive;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
+
+        @keyframes heartFall {
+            0% {
+                transform: translateY(-50px) rotate(0deg) scale(0.8);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+        .falling-heart {
+            position: absolute;
+            top: -30px;
+            pointer-events: none;
+            animation: heartFall linear forwards;
+            filter: drop-shadow(0 2px 4px rgba(244, 114, 182, 0.3));
+        }
     </style>
 </head>
-<body class="bg-pink-50/60 font-sans text-slate-700 min-h-screen flex flex-col justify-between selection:bg-pink-200 selection:text-pink-700">
+<body class="bg-gradient-to-br from-pink-200 via-rose-100 to-pink-300 font-sans text-slate-700 min-h-screen flex flex-col justify-between selection:bg-pink-200 selection:text-pink-700 relative overflow-x-hidden">
+
+    <!-- FALLING HEARTS CONTAINER -->
+    <div id="heartsContainer" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
 
     <!-- TOP NAVBAR -->
     <header class="w-full bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-pink-100/80 px-4 md:px-8 py-3 transition-all">
@@ -80,41 +89,37 @@
             <!-- Logo -->
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-400 to-rose-300 p-0.5 shadow-md shadow-pink-200">
-                    <img id="logoImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Logo" class="w-full h-full object-cover rounded-full">
+                    <img id="logoImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Logo" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
                 </div>
-                <span id="siteBrand" class="font-bold text-xs md:text-sm tracking-widest text-pink-400 uppercase">Sakura Haruno</span>
+                <span id="siteBrand" class="font-bold text-xs md:text-sm tracking-widest text-pink-400 uppercase">HINATA</span>
             </div>
 
             <!-- Search Bar -->
             <div class="flex-1 max-w-lg mx-2 md:mx-6">
                 <div class="relative flex items-center w-full">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 text-pink-300 text-sm"></i>
-                    <input type="text" id="searchInput" placeholder="Search aesthetic..." class="w-full pl-10 pr-4 py-2 bg-pink-50/70 focus:bg-white text-xs md:text-sm text-pink-700 placeholder-pink-300 rounded-full border border-pink-100 focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all">
+                    <input type="text" id="searchInput" onchange="handleSearch(this.value)" placeholder="Buscar en la galería..." class="w-full pl-10 pr-4 py-2 bg-pink-50/70 focus:bg-white text-xs md:text-sm text-pink-700 placeholder-pink-300 rounded-full border border-pink-100 focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all">
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex items-center gap-2 md:gap-3">
-                <!-- Edit Mode Toggle -->
-                <button onclick="toggleEditModal()" title="Editar todo el contenido" class="flex items-center gap-1.5 px-3 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs font-semibold shadow-md shadow-pink-200 transition-all transform hover:scale-105 active:scale-95">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <span class="hidden sm:inline">Editar Página</span>
+                <button onclick="toggleLikePost()" id="headerLikeBtn" class="flex items-center gap-1.5 px-3 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs font-semibold shadow-md shadow-pink-200 transition-all transform hover:scale-105 active:scale-95">
+                    <i id="headerLikeIcon" class="fa-solid fa-heart"></i>
+                    <span id="headerLikeText" class="hidden sm:inline">Me Gusta (1.2k)</span>
                 </button>
 
-                <!-- Add Button -->
-                <button onclick="showToast('¡Función de agregar nuevo post!')" class="w-8 h-8 md:w-9 md:h-9 bg-pink-100 hover:bg-pink-200 text-pink-500 rounded-full flex items-center justify-center transition-all">
-                    <i class="fa-solid fa-plus text-xs md:text-sm"></i>
+                <button onclick="sharePage()" title="Compartir espacio" class="w-8 h-8 md:w-9 md:h-9 bg-pink-100 hover:bg-pink-200 text-pink-500 rounded-full flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-share-nodes text-xs md:text-sm"></i>
                 </button>
 
-                <!-- Bell Notification -->
-                <button onclick="showToast('No tienes notificaciones nuevas ♡')" class="w-8 h-8 md:w-9 md:h-9 bg-pink-100 hover:bg-pink-200 text-pink-500 rounded-full flex items-center justify-center transition-all relative">
+                <button onclick="showToast('¡Sin notificaciones pendientes! ♡')" class="w-8 h-8 md:w-9 md:h-9 bg-pink-100 hover:bg-pink-200 text-pink-500 rounded-full flex items-center justify-center transition-all relative">
                     <i class="fa-solid fa-bell text-xs md:text-sm"></i>
                     <span class="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
                 </button>
 
-                <!-- Dropdown -->
-                <button onclick="toggleProfileDropdown()" class="w-8 h-8 md:w-9 md:h-9 bg-pink-100 hover:bg-pink-200 text-pink-500 rounded-full flex items-center justify-center transition-all">
-                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                <button onclick="toggleBookmark()" id="bookmarkBtn" title="Guardar en favoritos" class="w-8 h-8 md:w-9 md:h-9 bg-pink-100 hover:bg-pink-200 text-pink-500 rounded-full flex items-center justify-center transition-all">
+                    <i id="bookmarkIcon" class="fa-regular fa-bookmark text-xs md:text-sm"></i>
                 </button>
             </div>
         </div>
@@ -127,39 +132,35 @@
             <!-- LEFT COLUMN: Character Portrait Hero Card -->
             <div class="lg:col-span-5 w-full">
                 <div class="relative w-full h-[520px] md:h-[620px] rounded-3xl overflow-hidden shadow-2xl shadow-pink-200/60 border-2 border-white/80 group">
-                    <!-- Background Hero Image -->
-                    <img id="heroImg" src="https://i.ibb.co/yB3R6G5/ijj.png" alt="Hero Portrait" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out">
+                    <img id="heroImg" src="https://xatimg.com/image/TFPEEOBpwXgt.png" alt="Hero Portrait" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.src='https://placehold.co/600x900/fbcfe8/ec4899?text=Mitsuri+Kanroji'">
                     
-                    <!-- Soft Ambient Gradient Overlays -->
                     <div class="absolute inset-0 bg-gradient-to-t from-pink-950/60 via-transparent to-pink-500/10 pointer-events-none"></div>
 
-                    <!-- Bottom Profile Pill Badge (Matches screenshot badge) -->
+                    <!-- Top Status Badge for Visitors -->
+                    <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-md border border-white/60 flex items-center gap-1.5 text-xs text-pink-600 font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Oficial</span>
+                    </div>
+
+                    <!-- Bottom Profile Pill Badge -->
                     <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-xs">
                         <div class="bg-white/90 backdrop-blur-md p-2 pl-3 rounded-full shadow-lg shadow-pink-900/20 border border-white flex items-center justify-between gap-2">
-                            <!-- Left Avatar Initial -->
                             <div class="flex items-center gap-2">
                                 <span id="heroInitial" class="w-8 h-8 rounded-full bg-pink-100 text-pink-600 font-bold flex items-center justify-center text-sm shadow-inner">
                                     M
                                 </span>
-                                <!-- Heart Pulse Icon Badge -->
                                 <div class="w-8 h-8 rounded-full bg-gradient-to-r from-pink-400 to-rose-400 text-white flex items-center justify-center text-xs shadow-md shadow-pink-300/50">
                                     <i class="fa-solid fa-heart-pulse animate-pulse"></i>
                                 </div>
                             </div>
 
-                            <!-- Name Tag -->
                             <div class="flex-1 pr-3 text-right">
                                 <span id="heroName" class="font-extrabold text-xs md:text-sm tracking-wider text-pink-600 uppercase block truncate">
-                                    Sakura Haruno
+                                    Lanita
                                 </span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Quick Edit Button Overlay -->
-                    <button onclick="toggleEditModal()" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-pink-600 p-2.5 rounded-full shadow-md backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                        <i class="fa-solid fa-pen text-xs"></i>
-                    </button>
                 </div>
             </div>
 
@@ -169,23 +170,21 @@
                 <!-- TOP CARD (FEATURED MAIN CARD) -->
                 <div class="bg-white/90 backdrop-blur-md rounded-3xl p-5 md:p-6 shadow-xl shadow-pink-100/80 border border-pink-100/80 relative">
                     
-                    <!-- Card Sub-header (Avatar + Meta + Menu) -->
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-pink-300 p-0.5 shadow-sm">
-                                <img id="postAvatarImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Avatar" class="w-full h-full object-cover rounded-full">
+                                <img id="postAvatarImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Avatar" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
                             </div>
                             <div class="flex flex-col">
                                 <div class="flex items-center gap-2">
-                                    <span id="postAuthor" class="font-bold text-xs md:text-sm tracking-wider text-pink-500 uppercase">Sakura Haruno</span>
+                                    <span id="postAuthor" class="font-bold text-xs md:text-sm tracking-wider text-pink-500 uppercase">HINATA</span>
                                 </div>
                                 <span id="postSubtext" class="text-[10px] md:text-xs font-semibold text-pink-300 uppercase tracking-widest">
-                                    Sakura Haruno • 7 MINUTES AGO
+                                    HINATA • 7 MINUTES AGO
                                 </span>
                             </div>
                         </div>
 
-                        <!-- Header Menu Icon -->
                         <button class="text-pink-300 hover:text-pink-500 transition-colors p-2">
                             <i class="fa-solid fa-bars text-base"></i>
                         </button>
@@ -193,20 +192,17 @@
 
                     <!-- Featured Image Box with Script Title Overlay -->
                     <div class="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden mb-4 shadow-md group">
-                        <img id="postMainImg" src="https://xatimg.com/image/Zm8gYNM2C5o4.jpg" alt="Love Pillar Post" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img id="postMainImg" src="https://xatimg.com/image/Kumg7dATRgmy.jpg" alt="uwu Post" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/800x600/fbcfe8/ec4899?text=Love+Pillar'">
                         
-                        <!-- Soft Gradient Tint -->
                         <div class="absolute inset-0 bg-gradient-to-t from-pink-900/40 via-transparent to-transparent"></div>
 
-                        <!-- Cursive Script Overlay Text (Matches "love pillar" script in image) -->
                         <div class="absolute bottom-4 left-0 right-0 text-center">
                             <h2 id="postOverlayTitle" class="script-title text-4xl md:text-5xl text-white font-normal tracking-wide drop-shadow-md">
-                                Sakura Haruno
+                                HINATA
                             </h2>
                         </div>
                     </div>
 
-                    <!-- Caption Description Text -->
                     <p id="postCaptionText" class="text-xs md:text-sm text-pink-300/90 leading-relaxed font-medium text-center px-2">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.
                     </p>
@@ -214,57 +210,51 @@
 
                 <!-- CATEGORY TABS NAVBAR -->
                 <div class="flex items-center justify-around sm:justify-center gap-2 sm:gap-8 border-b border-pink-200/60 pb-3 px-2 overflow-x-auto">
-                    <button onclick="setActiveTab(this)" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
-                        ART
+                    <button onclick="setActiveTab(this, 'Nails')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                        Nails
                     </button>
-                    <button onclick="setActiveTab(this)" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
-                        ANIME
+                    <button onclick="setActiveTab(this, 'ME')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                        ME
                     </button>
-                    <!-- Active Default Tab -->
-                    <button onclick="setActiveTab(this)" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-500 border-b-2 border-pink-400 pb-1 transition-all">
-                        AESTHETIC
+                    <button id="defaultTabBtn" onclick="setActiveTab(this, 'AESTHETIC')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-500 border-b-2 border-pink-400 pb-1 transition-all">
+                        GALLERY
                     </button>
-                    <button onclick="setActiveTab(this)" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                    <button onclick="setActiveTab(this, 'MANGA')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
                         MANGA
                     </button>
-                    <button onclick="setActiveTab(this)" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                    <button onclick="setActiveTab(this, 'MORE')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
                         MORE
                     </button>
                 </div>
 
                 <!-- BOTTOM CARD (2x2 GALLERY GRID WITH TAB BADGE) -->
-                <div class="relative bg-white/90 backdrop-blur-md rounded-3xl p-5 md:p-6 shadow-xl shadow-pink-100/80 border border-pink-100/80 mt-2">
+                <div class="relative bg-white/90 backdrop-blur-md rounded-3xl p-5 md:p-6 shadow-xl shadow-pink-100/80 border border-pink-100/80">
                     
-                    <!-- Left Tab Badge (Matches rounded hanging icon in screenshot) -->
                     <div class="absolute -left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex">
                         <div class="w-10 h-10 rounded-full bg-white p-1 shadow-lg shadow-pink-300/40 border border-pink-100 flex items-center justify-center">
                             <div class="w-full h-full rounded-full bg-gradient-to-tr from-pink-400 to-rose-300 p-0.5">
-                                <img id="gridTabImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Tab Icon" class="w-full h-full object-cover rounded-full">
+                                <img id="gridTabImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Tab Icon" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
                             </div>
                         </div>
                     </div>
 
                     <!-- 2x2 Photos Grid -->
                     <div class="grid grid-cols-2 gap-3 md:gap-4">
-                        <!-- Grid Item 1 -->
                         <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
-                            <img id="gridImg1" src="https://xatimg.com/image/wmcKhRxd8Dd3.jpg">
+                            <img id="gridImg1" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop" alt="Aesthetic Pink Hair" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
 
-                        <!-- Grid Item 2 -->
                         <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
                             <img id="gridImg2" src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&auto=format&fit=crop" alt="Aesthetic Pink Makeup" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
 
-                        <!-- Grid Item 3 -->
                         <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
-                            <img id="gridImg3" src="https://xatimg.com/image/6eHViUnWHq9f.jpg" alt="Aesthetic Glossy Lips" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img id="gridImg3" src="https://images.unsplash.com/photo-1588516903720-8ceb67f9ef84?w=500&auto=format&fit=crop" alt="Aesthetic Glossy Lips" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
 
-                        <!-- Grid Item 4 -->
                         <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
                             <img id="gridImg4" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop" alt="Aesthetic Ornament" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -278,113 +268,8 @@
 
     <!-- Footer -->
     <footer class="py-6 text-center text-xs text-pink-300 font-medium">
-        ♡ Sakura Haruno Aesthetic Space • Fully Editable Custom Template ♡
+        ♡ HINATA Aesthetic Space • Galería de Exhibición ♡
     </footer>
-
-    <!-- EDIT MODAL / DRAWER -->
-    <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl border border-pink-100">
-            
-            <div class="flex items-center justify-between border-b border-pink-100 pb-4 mb-6">
-                <div class="flex items-center gap-2 text-pink-500">
-                    <i class="fa-solid fa-sliders text-xl"></i>
-                    <h3 class="font-bold text-lg">Personalizar Tu Página</h3>
-                </div>
-                <button onclick="toggleEditModal()" class="w-8 h-8 rounded-full bg-pink-50 text-pink-400 hover:bg-pink-100 flex items-center justify-center transition-colors">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <form id="editForm" onsubmit="saveCustomizations(event)" class="space-y-6">
-                
-                <!-- Left Hero Card Settings -->
-                <div class="bg-pink-50/50 p-4 rounded-2xl border border-pink-100 space-y-4">
-                    <h4 class="font-bold text-xs uppercase tracking-wider text-pink-600 flex items-center gap-2">
-                        <i class="fa-solid fa-user-astronaut"></i> Tarjeta Principal (Izquierda)
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Personaje</label>
-                            <input type="text" id="inputHeroName" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Letra Inicial Badge</label>
-                            <input type="text" id="inputHeroInitial" maxlength="2" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">URL Imagen Retrato</label>
-                        <input type="url" id="inputHeroImg" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
-                </div>
-
-                <!-- Featured Post Settings -->
-                <div class="bg-pink-50/50 p-4 rounded-2xl border border-pink-100 space-y-4">
-                    <h4 class="font-bold text-xs uppercase tracking-wider text-pink-600 flex items-center gap-2">
-                        <i class="fa-solid fa-newspaper"></i> Post Destacado (Derecha Arriba)
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Autor / Marca</label>
-                            <input type="text" id="inputPostAuthor" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Subtexto / Tiempo</label>
-                            <input type="text" id="inputPostSubtext" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Título Cursiva en Foto</label>
-                            <input type="text" id="inputPostOverlayTitle" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">URL Imagen Post</label>
-                            <input type="url" id="inputPostMainImg" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Descripción / Texto</label>
-                        <textarea id="inputPostCaptionText" rows="2" class="w-full px-3 py-2 text-xs bg-white border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
-                    </div>
-                </div>
-
-                <!-- 2x2 Grid Image Settings -->
-                <div class="bg-pink-50/50 p-4 rounded-2xl border border-pink-100 space-y-4">
-                    <h4 class="font-bold text-xs uppercase tracking-wider text-pink-600 flex items-center gap-2">
-                        <i class="fa-solid fa-border-all"></i> Galería 2x2 (Derecha Abajo)
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">URL Foto 1 (Arriba Izq)</label>
-                            <input type="url" id="inputGridImg1" class="w-full px-3 py-1.5 text-xs bg-white border border-pink-200 rounded-xl">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">URL Foto 2 (Arriba Der)</label>
-                            <input type="url" id="inputGridImg2" class="w-full px-3 py-1.5 text-xs bg-white border border-pink-200 rounded-xl">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">URL Foto 3 (Abajo Izq)</label>
-                            <input type="url" id="inputGridImg3" class="w-full px-3 py-1.5 text-xs bg-white border border-pink-200 rounded-xl">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">URL Foto 4 (Abajo Der)</label>
-                            <input type="url" id="inputGridImg4" class="w-full px-3 py-1.5 text-xs bg-white border border-pink-200 rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Submit Buttons -->
-                <div class="flex items-center justify-end gap-3 pt-2">
-                    <button type="button" onclick="resetDefaults()" class="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-semibold rounded-xl transition-colors">
-                        Restaurar Todo
-                    </button>
-                    <button type="submit" class="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold rounded-xl shadow-md shadow-pink-200 transition-all">
-                        Guardar Cambios ♡
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-medium flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-none z-50">
@@ -393,118 +278,125 @@
     </div>
 
     <script>
-        const defaultData = {
-            heroName: "Sakura Haruno",
-            heroInitial: "M",
-            heroImg: "https://i.ibb.co/yB3R6G5/ijj.png",
-            
-            postAuthor: "Sakura Haruno",
-            postSubtext: "Sakura Haruno • 7 MINUTES AGO",
-            postOverlayTitle: "Flores de cerezo",
-            postMainImg: "https://xatimg.com/image/cVDJJa3fQYVD.jpg",
-            postCaptionText: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.",
-            postAvatarImg: "https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg",
+        let currentTab = 'AESTHETIC';
+        let isLiked = false;
+        let likeCount = 1240;
+        let isBookmarked = false;
 
-            gridImg1: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop",
-            gridImg2: "https://xatimg.com/image/wmcKhRxd8Dd3.jpg",
-            gridImg3: "https://images.unsplash.com/photo-1588516903720-8ceb67f9ef84?w=500&auto=format&fit=crop",
-            gridImg4: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop"
+        const categoriesData = {
+            AESTHETIC: {
+                postOverlayTitle: "HINATA",
+                postMainImg: "https://xatimg.com/image/Kumg7dATRgmy.jpg",
+                postCaptionText: "Espacio dedicado a la estética vibrante y dulce del Pilar del Amor, lleno de color, calidez y momentos mágicos.",
+                gridImg1: "https://xatimg.com/image/962e7FEqWPxI.jpg",
+                gridImg2: "https://xatimg.com/image/I39P1Z1ohPXw.jpg",
+                gridImg3: "https://xatimg.com/image/Gp43wQFORWLP.jpg",
+                gridImg4: "https://xatimg.com/image/mQyYH8ohBv3T.jpg",
+                
+            },
+            Nails: {
+                postOverlayTitle: "Nails gallery",
+                postMainImg: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop",
+                postCaptionText: "Ilustraciones digitales, fan arts originales y acuarelas inspiradas en el mundo de Demon Slayer.",
+                gridImg1: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=500&auto=format&fit=crop",
+                gridImg2: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=500&auto=format&fit=crop",
+                gridImg3: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=500&auto=format&fit=crop",
+                gridImg4: "https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=500&auto=format&fit=crop"
+            },
+            ME: {
+                postOverlayTitle: "anime cuts",
+                postMainImg: "https://xatimg.com/image/uO5bBFWA5axl.gif",
+                postCaptionText: "Escenas icónicas del anime, fotogramas de alta calidad y momentos de combate deslumbrantes.",
+                gridImg1: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop",
+                gridImg2: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop",
+                gridImg3: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop",
+                gridImg4: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop"
+            },
+            MANGA: {
+                postOverlayTitle: "manga panels",
+                postMainImg: "https://xatimg.com/image/CsOvb2jizlDd.jpg",
+                postCaptionText: "Viñetas originales del manga, portadas de tomos oficiales y estética monocromática con toques rosados.",
+                gridImg1: "https://xatimg.com/image/9EKtb3u3F4e0.jpg",
+                gridImg2: "https://xatimg.com/image/ARnazvHZkECF.jpg",
+                gridImg3: "https://xatimg.com/image/Yp7PeAsAOoBG.jpg",
+                gridImg4: "https://xatimg.com/image/s5xBqVxjabd7.jpg"
+            },
+            MORE: {
+                postOverlayTitle: "more vibes",
+                postMainImg: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop",
+                postCaptionText: "Fondos de pantalla adicionales, cosplays destacables, accesorios y sorpresas para todos los fans de Mitsuri.",
+                gridImg1: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500&auto=format&fit=crop",
+                gridImg2: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=500&auto=format&fit=crop",
+                gridImg3: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&auto=format&fit=crop",
+                gridImg4: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&auto=format&fit=crop"
+            }
         };
 
-        // Load saved state or default
-        function loadData() {
-            const saved = localStorage.getItem('love_pillar_custom');
-            return saved ? JSON.parse(saved) : { ...defaultData };
-        }
-
-        function applyData(data) {
-            document.getElementById('heroName').textContent = data.heroName;
-            document.getElementById('heroInitial').textContent = data.heroInitial;
-            document.getElementById('heroImg').src = data.heroImg;
-
-            document.getElementById('postAuthor').textContent = data.postAuthor;
-            document.getElementById('postSubtext').textContent = data.postSubtext;
-            document.getElementById('postOverlayTitle').textContent = data.postOverlayTitle;
-            document.getElementById('postMainImg').src = data.postMainImg;
-            document.getElementById('postCaptionText').textContent = data.postCaptionText;
-            document.getElementById('postAvatarImg').src = data.postAvatarImg || defaultData.postAvatarImg;
-
-            document.getElementById('gridImg1').src = data.gridImg1;
-            document.getElementById('gridImg2').src = data.gridImg2;
-            document.getElementById('gridImg3').src = data.gridImg3;
-            document.getElementById('gridImg4').src = data.gridImg4;
-        }
-
-        // Fill form fields with current data
-        function populateForm(data) {
-            document.getElementById('inputHeroName').value = data.heroName;
-            document.getElementById('inputHeroInitial').value = data.heroInitial;
-            document.getElementById('inputHeroImg').value = data.heroImg;
-
-            document.getElementById('inputPostAuthor').value = data.postAuthor;
-            document.getElementById('inputPostSubtext').value = data.postSubtext;
-            document.getElementById('inputPostOverlayTitle').value = data.postOverlayTitle;
-            document.getElementById('inputPostMainImg').value = data.postMainImg;
-            document.getElementById('inputPostCaptionText').value = data.postCaptionText;
-
-            document.getElementById('inputGridImg1').value = data.gridImg1;
-            document.getElementById('inputGridImg2').value = data.gridImg2;
-            document.getElementById('inputGridImg3').value = data.gridImg3;
-            document.getElementById('inputGridImg4').value = data.gridImg4;
-        }
-
-        function toggleEditModal() {
-            const modal = document.getElementById('editModal');
-            const isHidden = modal.classList.contains('pointer-events-none');
+        function applyTab(tab) {
+            const catData = categoriesData[tab] || categoriesData['AESTHETIC'];
             
-            if (isHidden) {
-                populateForm(loadData());
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-            } else {
-                modal.classList.add('opacity-0', 'pointer-events-none');
-            }
+            document.getElementById('postOverlayTitle').textContent = catData.postOverlayTitle;
+            document.getElementById('postMainImg').src = catData.postMainImg;
+            document.getElementById('postCaptionText').textContent = catData.postCaptionText;
+
+            document.getElementById('gridImg1').src = catData.gridImg1;
+            document.getElementById('gridImg2').src = catData.gridImg2;
+            document.getElementById('gridImg3').src = catData.gridImg3;
+            document.getElementById('gridImg4').src = catData.gridImg4;
         }
 
-        function saveCustomizations(e) {
-            e.preventDefault();
-            const newData = {
-                heroName: document.getElementById('inputHeroName').value,
-                heroInitial: document.getElementById('inputHeroInitial').value,
-                heroImg: document.getElementById('inputHeroImg').value,
-
-                postAuthor: document.getElementById('inputPostAuthor').value,
-                postSubtext: document.getElementById('inputPostSubtext').value,
-                postOverlayTitle: document.getElementById('inputPostOverlayTitle').value,
-                postMainImg: document.getElementById('inputPostMainImg').value,
-                postCaptionText: document.getElementById('inputPostCaptionText').value,
-                postAvatarImg: defaultData.postAvatarImg,
-
-                gridImg1: document.getElementById('inputGridImg1').value,
-                gridImg2: document.getElementById('inputGridImg2').value,
-                gridImg3: document.getElementById('inputGridImg3').value,
-                gridImg4: document.getElementById('inputGridImg4').value
-            };
-
-            localStorage.setItem('love_pillar_custom', JSON.stringify(newData));
-            applyData(newData);
-            toggleEditModal();
-            showToast('¡Cambios guardados con éxito!');
-        }
-
-        function resetDefaults() {
-            localStorage.removeItem('love_pillar_custom');
-            applyData(defaultData);
-            populateForm(defaultData);
-            showToast('Restaurado a la versión original');
-        }
-
-        function setActiveTab(button) {
+        function setActiveTab(button, category) {
             const tabs = document.querySelectorAll('.tab-btn');
             tabs.forEach(tab => {
                 tab.className = "tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1";
             });
             button.className = "tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-500 border-b-2 border-pink-400 pb-1 transition-all";
-            showToast(`Categoría seleccionada: ${button.textContent.trim()}`);
+            
+            if (category) {
+                currentTab = category;
+                applyTab(currentTab);
+                showToast(`Categoría: ${currentTab}`);
+            }
+        }
+
+        function toggleLikePost() {
+            isLiked = !isLiked;
+            const btn = document.getElementById('headerLikeBtn');
+            const text = document.getElementById('headerLikeText');
+            
+            if (isLiked) {
+                likeCount++;
+                btn.className = "flex items-center gap-1.5 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-semibold shadow-md shadow-pink-200 transition-all transform hover:scale-105 active:scale-95";
+                text.textContent = `¡Te gusta! (${(likeCount/1000).toFixed(1)}k)`;
+                showToast('¡Te ha gustado esta página! ♡');
+            } else {
+                likeCount--;
+                btn.className = "flex items-center gap-1.5 px-3 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs font-semibold shadow-md shadow-pink-200 transition-all transform hover:scale-105 active:scale-95";
+                text.textContent = `Me Gusta (${(likeCount/1000).toFixed(1)}k)`;
+                showToast('Me gusta eliminado');
+            }
+        }
+
+        function toggleBookmark() {
+            isBookmarked = !isBookmarked;
+            const icon = document.getElementById('bookmarkIcon');
+            if (isBookmarked) {
+                icon.className = "fa-solid fa-bookmark text-xs md:text-sm text-pink-600";
+                showToast('Añadido a tus guardados ♡');
+            } else {
+                icon.className = "fa-regular fa-bookmark text-xs md:text-sm";
+                showToast('Removido de guardados');
+            }
+        }
+
+        function sharePage() {
+            showToast('¡Enlace listo para compartir! ♡');
+        }
+
+        function handleSearch(query) {
+            if (query && query.trim() !== '') {
+                showToast(`Buscando: "${query}"...`);
+            }
         }
 
         function showToast(message) {
@@ -515,18 +407,39 @@
             toast.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 toast.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
-            }, 2500);
+            }, 2200);
         }
 
-        function toggleProfileDropdown() {
-            showToast('Menú desplegable');
-        }
-
-        // Initialize page on load
         window.addEventListener('DOMContentLoaded', () => {
-            const currentData = loadData();
-            applyData(currentData);
+            applyTab('AESTHETIC');
         });
+
+        function spawnFallingHeart() {
+            const container = document.getElementById('heartsContainer');
+            if (!container) return;
+            
+            const heart = document.createElement('div');
+            heart.className = 'falling-heart text-pink-400 select-none';
+            
+            const symbols = ['♥', '♡', '💖', '💗', '💕', '🌸', '✨'];
+            heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            const startX = Math.random() * 100;
+            const size = Math.random() * 1.4 + 0.8;
+            const duration = Math.random() * 4 + 3;
+            
+            heart.style.left = startX + 'vw';
+            heart.style.fontSize = size + 'rem';
+            heart.style.animationDuration = duration + 's';
+            
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(spawnFallingHeart, 250);
     </script>
 </body>
 </html>
