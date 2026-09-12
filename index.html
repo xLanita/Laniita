@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HINATA - Aesthetic Space</title>
+    <title>Lana - Aesthetic Space</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -61,19 +61,22 @@
         @keyframes heartFall {
             0% {
                 transform: translateY(-50px) rotate(0deg) scale(0.8);
-                opacity: 0.9;
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.1);
             }
             100% {
-                transform: translateY(105vh) rotate(360deg) scale(1.2);
+                transform: translateY(105vh) rotate(360deg) scale(1.3);
                 opacity: 0;
             }
         }
         .falling-heart {
             position: absolute;
-            top: -30px;
+            top: -40px;
             pointer-events: none;
             animation: heartFall linear forwards;
-            filter: drop-shadow(0 2px 4px rgba(244, 114, 182, 0.3));
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 4px 12px rgba(244, 114, 182, 0.3));
         }
     </style>
 </head>
@@ -89,9 +92,9 @@
             <!-- Logo -->
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-400 to-rose-300 p-0.5 shadow-md shadow-pink-200">
-                    <img id="logoImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Logo" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
+                    <img id="logoImg" src="https://xatimg.com/image/OcgNolPfBMFf.jpg" alt="Logo" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
                 </div>
-                <span id="siteBrand" class="font-bold text-xs md:text-sm tracking-widest text-pink-400 uppercase">HINATA</span>
+                <span id="siteBrand" class="font-bold text-xs md:text-sm tracking-widest text-pink-400 uppercase">Lana</span>
             </div>
 
             <!-- Search Bar -->
@@ -130,9 +133,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
             
             <!-- LEFT COLUMN: Character Portrait Hero Card -->
-            <div class="lg:col-span-5 w-full">
-                <div class="relative w-full h-[520px] md:h-[620px] rounded-3xl overflow-hidden shadow-2xl shadow-pink-200/60 border-2 border-white/80 group">
-                    <img id="heroImg" src="https://xatimg.com/image/TFPEEOBpwXgt.png" alt="Hero Portrait" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.src='https://placehold.co/600x900/fbcfe8/ec4899?text=Mitsuri+Kanroji'">
+            <div class="lg:col-span-5 w-full flex flex-col gap-4">
+                <div class="relative w-full h-[520px] md:h-[620px] rounded-3xl overflow-hidden shadow-2xl shadow-pink-200/60 border-2 border-white/80 group cursor-pointer" onclick="openImageModal(document.getElementById('heroImg'))">
+                    <img id="heroImg" src="https://xatimg.com/image/TFPEEOBpwXgt.png" alt="Hero Portrait" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out cursor-zoom-in" onerror="this.src='https://placehold.co/600x900/fbcfe8/ec4899?text=Mitsuri+Kanroji'">
                     
                     <div class="absolute inset-0 bg-gradient-to-t from-pink-950/60 via-transparent to-pink-500/10 pointer-events-none"></div>
 
@@ -162,6 +165,46 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- EXTRA PRESENTATION MENU WITH BLUR -->
+                <div class="bg-white/80 backdrop-blur-md rounded-3xl p-4 md:p-5 shadow-xl shadow-pink-200/50 border border-white/90 transition-all hover:bg-white/90">
+                    <div class="flex items-center justify-between border-b border-pink-100/80 pb-3 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-sparkles"></i>
+                            </span>
+                            <h3 class="font-bold text-xs md:text-sm text-pink-600 tracking-wider uppercase">Presentación</h3>
+                        </div>
+                        <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-pink-100/80 text-pink-500 font-bold tracking-wider">♡ SOFT VIBES</span>
+                    </div>
+
+                    <!-- Mini Navigation / Bio Tabs -->
+                    <div class="grid grid-cols-3 gap-2 mb-3">
+                        <button onclick="switchPresTab('about')" id="presTabAbout" class="pres-tab-btn bg-pink-500 text-white text-[11px] font-semibold py-1.5 px-2 rounded-xl transition-all text-center shadow-sm">
+                            Sobre Mí
+                        </button>
+                        <button onclick="switchPresTab('likes')" id="presTabLikes" class="pres-tab-btn bg-white/70 hover:bg-pink-100 text-pink-600 text-[11px] font-semibold py-1.5 px-2 rounded-xl transition-all text-center border border-pink-100">
+                            Gustos
+                        </button>
+                        <button onclick="switchPresTab('social')" id="presTabSocial" class="pres-tab-btn bg-white/70 hover:bg-pink-100 text-pink-600 text-[11px] font-semibold py-1.5 px-2 rounded-xl transition-all text-center border border-pink-100">
+                            Social
+                        </button>
+                    </div>
+
+                    <!-- Content Panel -->
+                    <div id="presContent" class="text-xs text-pink-400/90 leading-relaxed bg-pink-50/60 backdrop-blur-sm p-3 rounded-2xl border border-pink-100/60 min-h-[90px] flex items-center">
+                        <p id="presText" class="font-medium">
+                            ¡Hola! Bienvenido/a a mi espacio estético ♡ Me encantan las cosas cute, la moda pastel, la fotografía y crear contenido lindo.
+                        </p>
+                    </div>
+
+                    <!-- Quick Tags Footer -->
+                    <div class="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-pink-100/60">
+                        <span class="text-[10px] bg-white/80 text-pink-500 px-2.5 py-1 rounded-full font-semibold border border-pink-100">🌸 Anime & Art</span>
+                        <span class="text-[10px] bg-white/80 text-pink-500 px-2.5 py-1 rounded-full font-semibold border border-pink-100">🎀 Pink Aesthetic</span>
+                        <span class="text-[10px] bg-white/80 text-pink-500 px-2.5 py-1 rounded-full font-semibold border border-pink-100">☕ Coffee Lover</span>
+                    </div>
+                </div>
             </div>
 
             <!-- RIGHT COLUMN: Main Post Card, Categories & Grid Widget -->
@@ -173,14 +216,14 @@
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-pink-300 p-0.5 shadow-sm">
-                                <img id="postAvatarImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Avatar" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
+                                <img id="postAvatarImg" src="https://xatimg.com/image/OcgNolPfBMFf.jpg" alt="Avatar" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
                             </div>
                             <div class="flex flex-col">
                                 <div class="flex items-center gap-2">
-                                    <span id="postAuthor" class="font-bold text-xs md:text-sm tracking-wider text-pink-500 uppercase">HINATA</span>
+                                    <span id="postAuthor" class="font-bold text-xs md:text-sm tracking-wider text-pink-500 uppercase">Lana</span>
                                 </div>
                                 <span id="postSubtext" class="text-[10px] md:text-xs font-semibold text-pink-300 uppercase tracking-widest">
-                                    HINATA • 7 MINUTES AGO
+                                    Lana • 7 MINUTES AGO
                                 </span>
                             </div>
                         </div>
@@ -191,14 +234,14 @@
                     </div>
 
                     <!-- Featured Image Box with Script Title Overlay -->
-                    <div class="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden mb-4 shadow-md group">
-                        <img id="postMainImg" src="https://xatimg.com/image/Kumg7dATRgmy.jpg" alt="uwu Post" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/800x600/fbcfe8/ec4899?text=Love+Pillar'">
+                    <div class="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden mb-4 shadow-md group cursor-pointer" onclick="openImageModal(document.getElementById('postMainImg'))">
+                        <img id="postMainImg" src="https://xatimg.com/image/Kumg7dATRgmy.jpg" alt="Lana Image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-zoom-in" onerror="this.src='https://placehold.co/800x600/fbcfe8/ec4899?text=Love+Pillar'">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-pink-900/40 via-transparent to-transparent"></div>
 
-                        <div class="absolute bottom-4 left-0 right-0 text-center">
+                        <div class="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
                             <h2 id="postOverlayTitle" class="script-title text-4xl md:text-5xl text-white font-normal tracking-wide drop-shadow-md">
-                                HINATA
+                                Lana
                             </h2>
                         </div>
                     </div>
@@ -210,8 +253,8 @@
 
                 <!-- CATEGORY TABS NAVBAR -->
                 <div class="flex items-center justify-around sm:justify-center gap-2 sm:gap-8 border-b border-pink-200/60 pb-3 px-2 overflow-x-auto">
-                    <button onclick="setActiveTab(this, 'Nails')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
-                        Nails
+                    <button onclick="setActiveTab(this, 'aestetik')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                        EXTRA
                     </button>
                     <button onclick="setActiveTab(this, 'ME')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
                         ME
@@ -219,11 +262,11 @@
                     <button id="defaultTabBtn" onclick="setActiveTab(this, 'AESTHETIC')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-500 border-b-2 border-pink-400 pb-1 transition-all">
                         GALLERY
                     </button>
-                    <button onclick="setActiveTab(this, 'MANGA')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
-                        MANGA
+                    <button onclick="setActiveTab(this, 'GIF')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                        GIF
                     </button>
-                    <button onclick="setActiveTab(this, 'MORE')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
-                        MORE
+                    <button onclick="setActiveTab(this, 'CRUSHES')" class="tab-btn font-bold text-xs md:text-sm tracking-widest uppercase text-pink-300 hover:text-pink-500 transition-all py-1">
+                        CRUSHES
                     </button>
                 </div>
 
@@ -233,30 +276,30 @@
                     <div class="absolute -left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:flex">
                         <div class="w-10 h-10 rounded-full bg-white p-1 shadow-lg shadow-pink-300/40 border border-pink-100 flex items-center justify-center">
                             <div class="w-full h-full rounded-full bg-gradient-to-tr from-pink-400 to-rose-300 p-0.5">
-                                <img id="gridTabImg" src="https://i.ibb.co/YF16Dkz3/80bfdf431b98a82d3f925aa6ea3339d9.jpg" alt="Tab Icon" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
+                                <img id="gridTabImg" src="https://xatimg.com/image/OcgNolPfBMFf.jpg" alt="Tab Icon" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/fbcfe8/d946ef?text=LP'">
                             </div>
                         </div>
                     </div>
 
                     <!-- 2x2 Photos Grid -->
                     <div class="grid grid-cols-2 gap-3 md:gap-4">
-                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
-                            <img id="gridImg1" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop" alt="Aesthetic Pink Hair" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative cursor-pointer" onclick="openImageModal(document.getElementById('gridImg1'))">
+                            <img id="gridImg1" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop" alt="Foto de Galería 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-zoom-in">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
 
-                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
-                            <img id="gridImg2" src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&auto=format&fit=crop" alt="Aesthetic Pink Makeup" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative cursor-pointer" onclick="openImageModal(document.getElementById('gridImg2'))">
+                            <img id="gridImg2" src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&auto=format&fit=crop" alt="Foto de Galería 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-zoom-in">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
 
-                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
-                            <img id="gridImg3" src="https://images.unsplash.com/photo-1588516903720-8ceb67f9ef84?w=500&auto=format&fit=crop" alt="Aesthetic Glossy Lips" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative cursor-pointer" onclick="openImageModal(document.getElementById('gridImg3'))">
+                            <img id="gridImg3" src="https://images.unsplash.com/photo-1588516903720-8ceb67f9ef84?w=500&auto=format&fit=crop" alt="Foto de Galería 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-zoom-in">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
 
-                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative">
-                            <img id="gridImg4" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop" alt="Aesthetic Ornament" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="h-28 sm:h-36 md:h-40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all group relative cursor-pointer" onclick="openImageModal(document.getElementById('gridImg4'))">
+                            <img id="gridImg4" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop" alt="Foto de Galería 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-zoom-in">
                             <div class="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
                     </div>
@@ -268,8 +311,24 @@
 
     <!-- Footer -->
     <footer class="py-6 text-center text-xs text-pink-300 font-medium">
-        ♡ HINATA Aesthetic Space • Galería de Exhibición ♡
+        ♡ Lana Aesthetic Space • Galería de Exhibición ♡
     </footer>
+
+    <!-- LIGHTBOX / IMAGE MODAL -->
+    <div id="imageModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none" onclick="closeImageModal()">
+        <div class="relative max-w-4xl max-h-[90vh] bg-white/10 p-2 md:p-4 rounded-3xl border border-white/30 shadow-2xl flex flex-col items-center transform scale-95 transition-all duration-300" onclick="event.stopPropagation()">
+            <!-- Close Button -->
+            <button onclick="closeImageModal()" title="Cerrar (Esc)" class="absolute -top-3 -right-3 w-10 h-10 bg-pink-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 z-20 border-2 border-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <!-- Amplified Image -->
+            <img id="modalImage" src="" alt="Vista ampliada" class="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-2xl">
+            <!-- Caption -->
+            <div id="modalCaption" class="mt-3 text-white text-xs md:text-sm font-semibold tracking-wider text-center bg-pink-900/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-pink-300/30">
+                Vista Previa Ampliada ♡
+            </div>
+        </div>
+    </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-medium flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-none z-50">
@@ -285,52 +344,94 @@
 
         const categoriesData = {
             AESTHETIC: {
-                postOverlayTitle: "HINATA",
+                postOverlayTitle: "Lana",
                 postMainImg: "https://xatimg.com/image/Kumg7dATRgmy.jpg",
                 postCaptionText: "Espacio dedicado a la estética vibrante y dulce del Pilar del Amor, lleno de color, calidez y momentos mágicos.",
-                gridImg1: "https://xatimg.com/image/962e7FEqWPxI.jpg",
+                gridImg1: "https://xatimg.com/image/962e7FEqWPxI.jpg", 
                 gridImg2: "https://xatimg.com/image/I39P1Z1ohPXw.jpg",
                 gridImg3: "https://xatimg.com/image/Gp43wQFORWLP.jpg",
                 gridImg4: "https://xatimg.com/image/mQyYH8ohBv3T.jpg",
-                
             },
-            Nails: {
-                postOverlayTitle: "Nails gallery",
-                postMainImg: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop",
+            aestetik: {
+                postOverlayTitle: "No se",
+                postMainImg: "https://xatimg.com/image/tIdFYMsuj5iD.png",
                 postCaptionText: "Ilustraciones digitales, fan arts originales y acuarelas inspiradas en el mundo de Demon Slayer.",
-                gridImg1: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=500&auto=format&fit=crop",
-                gridImg2: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=500&auto=format&fit=crop",
-                gridImg3: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=500&auto=format&fit=crop",
-                gridImg4: "https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=500&auto=format&fit=crop"
+                gridImg1: "https://imgur.com/Slst0Pb.png",
+                gridImg2: "https://imgur.com/Qry0gma.png",
+                gridImg3: "https://imgur.com/oL9pFwL.png",
+                gridImg4: "https://imgur.com/dkJalga.png"
             },
             ME: {
-                postOverlayTitle: "anime cuts",
-                postMainImg: "https://xatimg.com/image/uO5bBFWA5axl.gif",
+                postOverlayTitle: "yop",
+                postMainImg: "https://xatimg.com/image/Of3lsLqWYrd9.png",
                 postCaptionText: "Escenas icónicas del anime, fotogramas de alta calidad y momentos de combate deslumbrantes.",
-                gridImg1: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop",
-                gridImg2: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop",
-                gridImg3: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop",
-                gridImg4: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop"
+                gridImg1: "https://xatimg.com/image/27DBpvaHEgSn.png",
+                gridImg2: "https://xatimg.com/image/ibGbm9fgVLbx.png",
+                gridImg3: "https://i.imgur.com/YaND2en.png",
+                gridImg4: "https://imgur.com/2wlyrJ1.png"
             },
-            MANGA: {
-                postOverlayTitle: "manga panels",
-                postMainImg: "https://xatimg.com/image/CsOvb2jizlDd.jpg",
+            GIF: {
+                postOverlayTitle: "GIF panels",
+                postMainImg: "https://xatimg.com/image/FT0uzbO7theL.jpg",
                 postCaptionText: "Viñetas originales del manga, portadas de tomos oficiales y estética monocromática con toques rosados.",
-                gridImg1: "https://xatimg.com/image/9EKtb3u3F4e0.jpg",
-                gridImg2: "https://xatimg.com/image/ARnazvHZkECF.jpg",
-                gridImg3: "https://xatimg.com/image/Yp7PeAsAOoBG.jpg",
-                gridImg4: "https://xatimg.com/image/s5xBqVxjabd7.jpg"
+                gridImg1: "https://xatimg.com/image/sDPo6VxVYXjU.gif",
+                gridImg2: "https://xatimg.com/image/OoRdEO7p3kqS.gif",
+                gridImg3: "https://xatimg.com/image/FBS2ozJX9akL.gif",
+                gridImg4: "https://xatimg.com/image/0VpnmXKVuwsb.gif"
             },
-            MORE: {
-                postOverlayTitle: "more vibes",
-                postMainImg: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop",
+            CRUSHES: {
+                postOverlayTitle: "Crushes vibes",
+                postMainImg: "https://xatimg.com/image/xaWLp6dEql3j.png",
                 postCaptionText: "Fondos de pantalla adicionales, cosplays destacables, accesorios y sorpresas para todos los fans de Mitsuri.",
-                gridImg1: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500&auto=format&fit=crop",
-                gridImg2: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=500&auto=format&fit=crop",
+                gridImg1: "https://xatimg.com/image/yWxxvqQdIdFN.gif",
+                gridImg2: "https://xatimg.com/image/pEc946oWCHHB.png",
                 gridImg3: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&auto=format&fit=crop",
                 gridImg4: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&auto=format&fit=crop"
             }
         };
+
+        function openImageModal(imgElement) {
+            if (!imgElement || !imgElement.src) return;
+
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalCap = document.getElementById('modalCaption');
+            
+            modalImg.src = imgElement.src;
+            modalCap.textContent = imgElement.alt || 'Vista Ampliada ♡';
+            
+            modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+            modal.classList.add('flex', 'opacity-100', 'pointer-events-auto');
+            
+            const container = modal.querySelector('div');
+            if (container) {
+                container.classList.remove('scale-95');
+                container.classList.add('scale-100');
+            }
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            if (!modal) return;
+            
+            const container = modal.querySelector('div');
+            if (container) {
+                container.classList.remove('scale-100');
+                container.classList.add('scale-95');
+            }
+            
+            modal.classList.remove('opacity-100', 'pointer-events-auto');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeImageModal();
+        });
 
         function applyTab(tab) {
             const catData = categoriesData[tab] || categoriesData['AESTHETIC'];
@@ -343,6 +444,17 @@
             document.getElementById('gridImg2').src = catData.gridImg2;
             document.getElementById('gridImg3').src = catData.gridImg3;
             document.getElementById('gridImg4').src = catData.gridImg4;
+
+            // Mantener el cursor de ampliación activo para todas las imágenes y pestañas
+            const targetImgIds = ['postMainImg', 'gridImg1', 'gridImg2', 'gridImg3', 'gridImg4'];
+            
+            targetImgIds.forEach(id => {
+                const img = document.getElementById(id);
+                if (img) {
+                    img.classList.remove('cursor-default');
+                    img.classList.add('cursor-zoom-in');
+                }
+            });
         }
 
         function setActiveTab(button, category) {
@@ -414,22 +526,57 @@
             applyTab('AESTHETIC');
         });
 
+        const presData = {
+            about: "¡Hola! Bienvenido/a a mi espacio estético ♡ Me encantan las cosas cute, la moda pastel, la fotografía y crear contenido lindo.",
+            likes: "✨ Mis cosas favoritas: Té boba 🧋, fotos retro 📷, manicura pastel 💅, peluches suaves y música lo-fi 🎧.",
+            social: "💌 ¡Conéctate conmigo! Encuéntrame en Pinterest, Instagram y Discord para compartir más vibras lindas. ♡"
+        };
+
+        function switchPresTab(tabKey) {
+            const tabs = ['about', 'likes', 'social'];
+            tabs.forEach(key => {
+                const btnId = 'presTab' + key.charAt(0).toUpperCase() + key.slice(1);
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    if (key === tabKey) {
+                        btn.className = "pres-tab-btn bg-pink-500 text-white text-[11px] font-semibold py-1.5 px-2 rounded-xl transition-all text-center shadow-sm";
+                    } else {
+                        btn.className = "pres-tab-btn bg-white/70 hover:bg-pink-100 text-pink-600 text-[11px] font-semibold py-1.5 px-2 rounded-xl transition-all text-center border border-pink-100";
+                    }
+                }
+            });
+            const textEl = document.getElementById('presText');
+            if (textEl && presData[tabKey]) {
+                textEl.textContent = presData[tabKey];
+            }
+        }
+
         function spawnFallingHeart() {
             const container = document.getElementById('heartsContainer');
             if (!container) return;
             
             const heart = document.createElement('div');
-            heart.className = 'falling-heart text-pink-400 select-none';
+            heart.className = 'falling-heart select-none flex items-center justify-center';
             
-            const symbols = ['♥', '♡', '💖', '💗', '💕', '🌸', '✨'];
-            heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            // Semi-transparent glass / outline hearts SVG variants
+            const svgTemplates = [
+                `<svg class="w-full h-full" viewBox="0 0 24 24" fill="rgba(255, 255, 255, 0.25)" stroke="rgba(255, 255, 255, 0.85)" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+                `<svg class="w-full h-full" viewBox="0 0 24 24" fill="rgba(244, 114, 182, 0.2)" stroke="rgba(244, 114, 182, 0.75)" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+                `<svg class="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 0.9)" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+                `<span style="color: rgba(255,255,255,0.75); text-shadow: 0 0 6px rgba(244,114,182,0.5); font-size: 1.4rem;">♡</span>`
+            ];
+            
+            heart.innerHTML = svgTemplates[Math.floor(Math.random() * svgTemplates.length)];
             
             const startX = Math.random() * 100;
-            const size = Math.random() * 1.4 + 0.8;
-            const duration = Math.random() * 4 + 3;
+            const size = Math.random() * 18 + 14; // Size in pixels
+            const duration = Math.random() * 5 + 4;
+            const opacity = Math.random() * 0.45 + 0.35; // Glassy transparency
             
             heart.style.left = startX + 'vw';
-            heart.style.fontSize = size + 'rem';
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            heart.style.opacity = opacity;
             heart.style.animationDuration = duration + 's';
             
             container.appendChild(heart);
@@ -439,7 +586,7 @@
             }, duration * 1000);
         }
 
-        setInterval(spawnFallingHeart, 250);
+        setInterval(spawnFallingHeart, 220);
     </script>
 </body>
 </html>
